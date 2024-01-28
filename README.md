@@ -25,4 +25,14 @@ php ./wp-cli.phar core install --path=./wpssgblog --url=wpssgblog.local --title=
 # see https://github.com/wp-cli/server-command/issues/81
 php ./wp-cli.phar server --host=127.0.0.1 --port=8080
 open http://127.0.0.1/wpssgblog
+
+php wp-cli.phar option set permalink_structure '/%year%-%monthnum%-%day%-%postname%/' --path=./wpssgblog
+php wp-cli.phar post list --field=url --path=./wpssgblog
+```
+
+```shell
+# uploads, but depends on Apache?
+mkdir ./wpssgblog/wp-content/uploads
+#chgrp web ./wpssgblog/wp-content/uploads/
+chmod 775 ./wpssgblog/wp-content/uploads/
 ```
