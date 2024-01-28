@@ -1,4 +1,4 @@
-# [WIP] Attempt at using WordPress as a Static Site Generator (SSG
+# [WIP] Attempt at using WordPress as a Static Site Generator (SSG)
 
 ```shell
 sudo apt install php-cli php-mysql mysql-server
