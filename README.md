@@ -21,7 +21,8 @@ php ./wp-cli.phar config create --path=./wpssgblog --locale=en_US --dbuser=wpssg
 php ./wp-cli.phar db create --path=./wpssgblog
 php ./wp-cli.phar core install --path=./wpssgblog --url=wpssgblog.local --title="WP-CLI" --admin_user=wpcli --admin_password=wpcli --admin_email=info@wp-cli.org
 
-# do not pass --path=./wpssgblog for now; this command does not format the http://127.0.0.1:8080?page_id=2 correctly, but loads the /wpssgblog/ CSS and JS assets correctly; see https://github.com/wp-cli/server-command/issues/81
+# do not pass --path=./wpssgblog for now; this command does not format the http://127.0.0.1:8080?page_id=2 correctly, but loads the /wpssgblog/ CSS and JS assets correctly
+# see https://github.com/wp-cli/server-command/issues/81
 php ./wp-cli.phar server --host=127.0.0.1 --port=8080
 open http://127.0.0.1/wpssgblog
 ```
