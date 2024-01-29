@@ -15,7 +15,7 @@ sudo mysql --user=wpssguser --password=wpssgpass --database=wpssgdb <<< "SHOW DA
 
 
 # https://make.wordpress.org/cli/handbook/how-to/how-to-install/
-php ./wp-cli.phar core download --locale=en_US
+php ./wp-cli.phar core download --locale=en_US #  --skip-content --force
 php ./wp-cli.phar config create --locale=en_US --dbuser=wpssguser --dbpass=wpssgpass  --dbname=wpssgdb  --dbhost=127.0.0.1
 php ./wp-cli.phar db create   
 php ./wp-cli.phar core install --url=localhost:8080 --title=wpcli --admin_user=wpcli --admin_password=wpcli --admin_email=info@wp-cli.org
@@ -60,3 +60,4 @@ python wpssgdata.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
 - https://www.digitalocean.com/community/tutorials/how-to-use-wp-cli-to-manage-your-wordpress-site-from-the-command-line
 - https://blog.hubspot.com/website/backup-wordpress-site-using-cpanel
 - https://simplystatic.com
+- https://kinsta.com/blog/wp-cli/
