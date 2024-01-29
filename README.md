@@ -41,6 +41,15 @@ mkdir ./wp-content/uploads
 chmod 775 ./wp-content/uploads/
 
 php ./wp-cli.phar export --filename_format=export.xml
-sudo mysqldump --skip-extended-insert --compact wpssgdb > wpssgdb.sql
-awk mysql2sqlite wpssgdb.sql | sqlite3 wpssgdb.sqlite # from https://github.com/dumblob/mysql2sqlite  https://stackoverflow.com/questions/5164033/export-a-mysql-database-to-sqlite-database
+sudo mysqldump --skip-extended-insert --no-create-info --compact wpssgdb > wpssgdbdata.sql
+sudo mysqldump --skip-extended-insert --no-data --compact wpssgdb > wpssgdbddl.sql
+git clone https://github.com/dumblob/mysql2sqlite 
+awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql > wpssgddlsqlite.sql 
+| sqlite3 wpssgdb.sqlite # from  https://stackoverflow.com/questions/5164033/export-a-mysql-database-to-sqlite-database
 ```
+
+# References
+- https://make.wordpress.org/core/2023/04/19/status-update-on-the-sqlite-project/
+- https://github.com/WordPress/wordpress-develop/pull/3220
+- https://core.trac.wordpress.org/ticket/57793
+- https://wordpress.org/plugins/sqlite-database-integration/
