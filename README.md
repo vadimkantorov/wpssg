@@ -1,7 +1,7 @@
 # [WIP] Attempt at using WordPress as a Static Site Generator (SSG)
 
 ```shell
-sudo apt install php-cli php-mysql mysql-server
+sudo apt install php-cli php-mysql php-dom mysql-server sqlite3
 
 # download https://wp-cli.org/
 curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
@@ -39,4 +39,8 @@ php wp-cli.phar post list --post_type=post --field=url
 mkdir ./wp-content/uploads
 #chgrp web ./wp-content/uploads/
 chmod 775 ./wp-content/uploads/
+
+php ./wp-cli.phar export --filename_format=export.xml
+sudo mysqldump --skip-extended-insert --compact wpssgdb > wpssgdb.sql
+awk mysql2sqlite wpssgdb.sql | sqlite3 wpssgdb.sqlite # from https://github.com/dumblob/mysql2sqlite  https://stackoverflow.com/questions/5164033/export-a-mysql-database-to-sqlite-database
 ```
