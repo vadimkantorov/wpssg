@@ -56,6 +56,7 @@ python wpssgdata.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
 - https://core.trac.wordpress.org/ticket/57793
 - https://wordpress.org/plugins/sqlite-database-integration/
 - https://wp2static.com/developers/wp-cli/
+- https://github.com/dirtsimple/postmark
 - https://www.digitalocean.com/community/tutorials/how-to-use-wp-cli-to-manage-your-wordpress-site-from-the-command-line
 - https://blog.hubspot.com/website/backup-wordpress-site-using-cpanel
 - https://simplystatic.com
