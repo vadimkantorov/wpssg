@@ -41,8 +41,9 @@ mkdir ./wp-content/uploads
 chmod 775 ./wp-content/uploads/
 
 php ./wp-cli.phar export --filename_format=exportWXR.xml
-sudo mysqldump --skip-extended-insert --no-data --compact wpssgdb > wpssgdbddl.sql
-sudo mysqldump --skip-extended-insert --no-create-info --compact wpssgdb > wpssgdata.sql
+sudo mysqldump --skip-extended-insert --no-data --compact wpssgdb --result-file=wpssgdbddl.sql
+sudo mysqldump --skip-extended-insert --no-create-info --compact wpssgdb --result-file=wpssgdata.sql
+sudo mysqldump --xml --skip-extended-insert --no-create-info --compact wpssgdb wp_options --result-file=wpssgopts.xml
 git clone https://github.com/dumblob/mysql2sqlite 
 awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
 python wpssgdata.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
