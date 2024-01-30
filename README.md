@@ -79,3 +79,4 @@ python wpssgdata.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
 - https://simplystatic.com
 - https://kinsta.com/blog/wp-cli/
 - https://leonstafford.wordpress.com/wordpress-static-html-output-plugin
+- https://localwp.com/
