@@ -32,6 +32,10 @@ php wp-cli.phar post list --post_type=post --field=url
 # wget --recursive --html-extension http://localhost:8080
 # wget -P wpssgmirror -nd --mirror --convert-links --adjust-extension --page-requisites  --no-parent  --restrict-file-names=ascii,windows http://localhost:8080
 
+git clone https://github.com/dirtsimple/postmark
+cp postmark_composer.json postmark/composer.json
+php wp-cli.phar package install ./postmark
+
 
 curl -O -L https://github.com/elementor/wp2static/archive/refs/tags/7.2.tar.gz
 mkdir -p wp-content/plugins/wp2static # php wp-cli.phar plugin path
