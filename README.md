@@ -32,6 +32,22 @@ php wp-cli.phar post list --post_type=post --field=url
 # wget --recursive --html-extension http://localhost:8080
 # wget -P wpssgmirror -nd --mirror --convert-links --adjust-extension --page-requisites  --no-parent  --restrict-file-names=ascii,windows http://localhost:8080
 
+
+curl -O -L https://github.com/elementor/wp2static/archive/refs/tags/7.2.tar.gz
+mkdir -p wp-content/plugins/wp2static # php wp-cli.phar plugin path
+tar -xf 7.2.tar.gz -C wp-content/plugins/wp2static --strip-components=1
+cd wp-content/plugins/wp2static
+curl -o composer.phar https://getcomposer.org/installer
+php composer.phar install
+php composer.phar update
+php composer.phar install --quiet --no-dev --optimize-autoloader
+cd ../../../
+php wp-cli.phar plugin activate wp2static
+php wp-cli.phar wp2static options set deploymentURL http://localhost:8080/
+php wp-cli.phar wp2static detect
+php wp-cli.phar wp2static crawl
+php wp-cli.phar wp2static post_process
+open wp-content/uploads/wp2static-processed-site/index.html
 ```
 
 ```shell
@@ -48,6 +64,7 @@ git clone https://github.com/dumblob/mysql2sqlite
 awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
 python wpssgdata.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
 # use https://sqlitebrowser.org/ to inspect wpssgdata.db
+
 ```
 
 # References
@@ -61,3 +78,4 @@ python wpssgdata.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
 - https://blog.hubspot.com/website/backup-wordpress-site-using-cpanel
 - https://simplystatic.com
 - https://kinsta.com/blog/wp-cli/
+- https://leonstafford.wordpress.com/wordpress-static-html-output-plugin
