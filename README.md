@@ -34,8 +34,12 @@ php wp-cli.phar post list --post_type=post --field=url
 
 git clone https://github.com/dirtsimple/postmark
 cp postmark_composer.json postmark/composer.json
+sed -i 's@League\\CommonMark\\Ext\\Table\\TableExtension@dirtsimple\\Postmark\\ShortcodeParser@g'  ./postmark/src/Formatter.php
+sed -i 's@League\\CommonMark\\Ext\\Strikethrough\\StrikethroughExtension@dirtsimple\\Postmark\\ShortcodeParser@g'  ./postmark/src/Formatter.php
+sed -i 's@League\\CommonMark\\Ext\\SmartPunct\\SmartPunctExtension@dirtsimple\\Postmark\\ShortcodeParser@g'  ./postmark/src/Formatter.php
+sed -i 's@Webuni\\CommonMark\\AttributesExtension\\AttributesExtension@dirtsimple\\Postmark\\ShortcodeParser@g'  ./postmark/src/Formatter.php
 php wp-cli.phar package install ./postmark
-
+php wp-cli.phar postmark tree _posts
 
 curl -O -L https://github.com/elementor/wp2static/archive/refs/tags/7.2.tar.gz
 mkdir -p wp-content/plugins/wp2static # php wp-cli.phar plugin path
@@ -84,3 +88,6 @@ python wpssgdata.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
 - https://kinsta.com/blog/wp-cli/
 - https://leonstafford.wordpress.com/wordpress-static-html-output-plugin
 - https://localwp.com/
+- https://www.gloomycorner.com/publishing-posts-to-a-wordpress-site-with-markdown/
+- https://github.com/joshcanhelp/wordpress-to-markdown
+- https://github.com/gloomic/wp-cli-markdown-post

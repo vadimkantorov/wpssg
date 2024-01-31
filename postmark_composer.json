@@ -36,11 +36,7 @@
         "wp-cli/wp-cli": "*",
         "wp-cli/entity-command": "*",
         "rarst/wpdatetime": "*",
-        "league/commonmark": "*",
-        "league/commonmark-ext-smartpunct": "*",
-        "league/commonmark-ext-strikethrough": "*",
-        "league/commonmark-ext-table": "*",
-        "webuni/commonmark-attributes-extension": "*",
+        "league/commonmark": "^1.0",
         "twig/twig": "*",
         "symfony/yaml": "*",
         "php" : "*"
