@@ -91,3 +91,4 @@ python wpssgdata.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
 - https://www.gloomycorner.com/publishing-posts-to-a-wordpress-site-with-markdown/
 - https://github.com/joshcanhelp/wordpress-to-markdown
 - https://github.com/gloomic/wp-cli-markdown-post
+- https://stackoverflow.com/questions/18671/quick-easy-way-to-migrate-sqlite3-to-mysql
