@@ -32,9 +32,6 @@ jobs:
           php ./wp-cli.phar post list --post_type=page --field=url
           php ./wp-cli.phar post list --post_type=post --field=url
           
-          php ./wp-cli.phar server --host=localhost --port=8080 &
-          sleep 5
-
           mkdir -p ./wp-content/plugins/wp2static # php wp-cli.phar plugin path
           tar -xf 7.2.tar.gz -C ./wp-content/plugins/wp2static --strip-components=1
           cd ./wp-content/plugins/wp2static
@@ -45,6 +42,9 @@ jobs:
           php composer.phar install --quiet --no-dev --optimize-autoloader
           cd  ../../../
           php ./wp-cli.phar plugin activate wp2static
+          
+          php ./wp-cli.phar server --host=localhost --port=8080 &
+          sleep 5
           php ./wp-cli.phar wp2static options set deploymentURL http://localhost:8080/
           php ./wp-cli.phar wp2static detect
           php ./wp-cli.phar wp2static crawl
@@ -63,12 +63,11 @@ jobs:
       
       - name: Export to Sqlite
         run: |
-
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --hex-blob --xml --no-create-info --compact wpssgdb wp_options --result-file=wpssgopts.xml
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --hex-blob --no-data --compact wpssgdb --result-file=wpssgddl.sql
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --hex-blob --no-create-info --compact wpssgdb --result-file=wpssgdata.sql && sed -e "s/\\\'/''/g" -e "s/_binary /X/g" wpssgdata.sql > wpssgdatasqlite.sql
           git clone https://github.com/mysql2sqlite/mysql2sqlite && awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
-          cat wpssgddlsqlite.sql wpssgdata.sql | sqlite3 wpssgsqlite.db
+          #cat wpssgddlsqlite.sql wpssgdata.sql | sqlite3 wpssgsqlite.db
        
       - name: Artifacts
         uses: actions/upload-artifact@v4
@@ -80,5 +79,6 @@ jobs:
             wpssgdata.sql
             wpssgddlsqlite.sql
             wpssgdatasqlite.sql
-            wpssgsqlite.db
             wp-content/uploads/wp2static-processed-site/
+
+#wpssgsqlite.db
