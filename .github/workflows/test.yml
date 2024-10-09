@@ -31,7 +31,6 @@ jobs:
           
           php ./wp-cli.phar post list --post_type=page --field=url
           php ./wp-cli.phar post list --post_type=post --field=url
-          php ./wp-cli.phar export --filename_format=exportWXR.xml
 
       - name: Setup postmark
         run: |
@@ -41,6 +40,7 @@ jobs:
           sed -i 's@League\\CommonMark\\Ext\\SmartPunct\\SmartPunctExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
           sed -i 's@Webuni\\CommonMark\\AttributesExtension\\AttributesExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
           php ./wp-cli.phar package install ./postmark
+          php ./wp-cli.phar export --filename_format=exportWXR.xml
 
       - name: Setup wp2static
         run: |
@@ -70,7 +70,8 @@ jobs:
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --no-data --compact wpssgdb --result-file=wpssgddl.sql
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --no-create-info --compact wpssgdb --result-file=wpssgdata.sql && sed -e "s/\\\'/''/g" -e "s/_binary //g" wpssgdata.sql > wpssgdatasqlite.sql
           git clone https://github.com/mysql2sqlite/mysql2sqlite && awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
-          (cat wpssgddlsqlite.sql wpssgdata.sql | sqlite3 wpssgsqlite.db) || true
+          sqlite3 wpssgsqlite.db < wpssgddlsqlite.sql
+          (cat wpssgdatasqlite.sql | sqlite3 wpssgsqlite.db) || true
        
       - name: Artifacts
         uses: actions/upload-artifact@v4
