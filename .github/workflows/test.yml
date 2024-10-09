@@ -1,0 +1,29 @@
+name: test
+
+on: workflow_dispatch
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Prerequisites
+        run: |
+          sudo apt install php-cli php-mysql php-dom mysql-server sqlite3
+          curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+          curl -o composer.phar https://getcomposer.org/installer
+          git clone https://github.com/dirtsimple/postmark
+          curl -O -L https://github.com/elementor/wp2static/archive/refs/tags/7.2.tar.gz
+      
+      - name: Test
+        run: |
+          sudo service mysql start
+          sudo mysql <<< "CREATE USER 'wpssguser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'wpssgpass';"
+          sudo mysql <<< "SHOW DATABASES; SELECT user FROM mysql.user;"
+          sudo mysql --user=wpssguser --password=wpssgpass --database=wpssgdb <<< "SHOW DATABASES"
+       
+#      - name: Artifacts
+#        uses: actions/upload-artifact@v4
+#        with:
+#          path: test.so

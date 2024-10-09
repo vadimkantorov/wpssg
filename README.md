@@ -94,3 +94,4 @@ python wpssgdata.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
 - https://stackoverflow.com/questions/18671/quick-easy-way-to-migrate-sqlite3-to-mysql
 - https://te-st.org/2023/09/01/kind-wordpress/
 - https://kndwp.org/
+- https://wp2static.com/developers/wp-cli/
