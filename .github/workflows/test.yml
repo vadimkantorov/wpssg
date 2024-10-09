@@ -66,6 +66,7 @@ jobs:
           git clone https://github.com/mysql2sqlite/mysql2sqlite && awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
           sed "s/\\\'/''/g" wpssgddlsqlite.sql wpssgdata.sql | sqlite3 wpssgsqlite.db
           #python wpssgsqlite.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
+          #https://gist.github.com/esperlu/943776
        
       - name: Artifacts
         uses: actions/upload-artifact@v4
