@@ -27,7 +27,7 @@ jobs:
           #php ./wp-cli.phar db create
           php ./wp-cli.phar core install --url=localhost:8080 --title=wpcli --admin_user=wpcli --admin_password=wpcli --admin_email=info@wp-cli.org
           php ./wp-cli.phar option set permalink_structure '/%year%-%monthnum%-%day%-%postname%/'
-          php ./wp-cli.phar theme install --activate https://knd.te-st.ru/kandinsky.zip
+          #php ./wp-cli.phar theme install --activate https://knd.te-st.ru/kandinsky.zip
           
           find
 
