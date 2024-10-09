@@ -25,7 +25,7 @@ jobs:
           php ./wp-cli.phar core download --locale=en_US #  --skip-content --force
           php ./wp-cli.phar config create --locale=en_US --dbuser=wpssguser --dbpass=wpssgpass --dbname=wpssgdb --dbhost=127.0.0.1
           cat wp-config.php
-          php ./wp-cli.phar db create --dbuser=wpssguser@127.0.0.1
+          php ./wp-cli.phar db create
           #php ./wp-cli.phar core install --url=localhost:8080 --title=wpcli --admin_user=wpcli --admin_password=wpcli --admin_email=info@wp-cli.org
           #php wp-cli.phar option set permalink_structure '/%year%-%monthnum%-%day%-%postname%/'
        
