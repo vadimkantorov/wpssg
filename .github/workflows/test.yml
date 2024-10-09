@@ -31,7 +31,7 @@ jobs:
           php ./wp-cli.phar post list --post_type=page --field=url
           php ./wp-cli.phar post list --post_type=post --field=url
           
-          php ./wp-cli.phar server --host=localhost --port=8080
+          php ./wp-cli.phar server --host=localhost --port=8080 &
           curl http://127.0.0.1:8080
        
 #      - name: Artifacts
