@@ -32,10 +32,10 @@ jobs:
           mkdir -p wp-content/plugins/wp2static # php wp-cli.phar plugin path
           tar -xf 7.2.tar.gz -C wp-content/plugins/wp2static --strip-components=1
           cd wp-content/plugins/wp2static
-          php ./composer.phar install
-          php ./composer.phar update
-          php ./composer.phar install --quiet --no-dev --optimize-autoloader
-          cd ../../../
+          php ../../../composer.phar install
+          php ../../../composer.phar update
+          php ../../../composer.phar install --quiet --no-dev --optimize-autoloader
+          cd  ../../../
 
           cp postmark_composer.json postmark/composer.json
           sed -i 's@League\\CommonMark\\Ext\\Table\\TableExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
