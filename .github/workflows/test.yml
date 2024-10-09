@@ -30,9 +30,16 @@ jobs:
           php ./wp-cli.phar theme install --activate https://knd.te-st.ru/kandinsky.zip
           php ./wp-cli.phar post list --post_type=page --field=url
           php ./wp-cli.phar post list --post_type=post --field=url
+
+          cp postmark_composer.json postmark/composer.json
+          sed -i 's@League\\CommonMark\\Ext\\Table\\TableExtension@dirtsimple\\Postmark\\ShortcodeParser@g'  ./postmark/src/Formatter.php
+          sed -i 's@League\\CommonMark\\Ext\\Strikethrough\\StrikethroughExtension@dirtsimple\\Postmark\\ShortcodeParser@g'  ./postmark/src/Formatter.php
+          sed -i 's@League\\CommonMark\\Ext\\SmartPunct\\SmartPunctExtension@dirtsimple\\Postmark\\ShortcodeParser@g'  ./postmark/src/Formatter.php
+          sed -i 's@Webuni\\CommonMark\\AttributesExtension\\AttributesExtension@dirtsimple\\Postmark\\ShortcodeParser@g'  ./postmark/src/Formatter.php
+          php ./wp-cli.phar package install ./postmark
           
-          php ./wp-cli.phar server --host=localhost --port=8080 &
-          curl http://127.0.0.1:8080
+          #php ./wp-cli.phar server --host=localhost --port=8080 &
+          #curl http://127.0.0.1:8080
        
 #      - name: Artifacts
 #        uses: actions/upload-artifact@v4
