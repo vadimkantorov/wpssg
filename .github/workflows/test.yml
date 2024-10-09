@@ -66,19 +66,19 @@ jobs:
 
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --hex-blob --xml --no-create-info --compact wpssgdb wp_options --result-file=wpssgopts.xml
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --hex-blob --no-data --compact wpssgdb --result-file=wpssgddl.sql
-          sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --hex-blob --no-create-info --compact wpssgdb --result-file=wpssgdata.sql
+          sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --hex-blob --no-create-info --compact wpssgdb --result-file=wpssgdata.sql && sed -e "s/\\\'/''/g" -e "s/_binary /X/g" wpssgdata.sql > wpssgdatasqlite.sql
           git clone https://github.com/mysql2sqlite/mysql2sqlite && awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
-          #sed "s/\\\'/''/g" wpssgddlsqlite.sql wpssgdata.sql | sqlite3 wpssgsqlite.db
+          cat wpssgddlsqlite.sql wpssgdata.sql | sqlite3 wpssgsqlite.db
        
       - name: Artifacts
         uses: actions/upload-artifact@v4
         with:
-          #wp-content/uploads/wp2static-processed-site/
           path: |
             exportWXR.xml 
             wpssgopts.xml
             wpssgddl.sql
             wpssgdata.sql
             wpssgddlsqlite.sql
-            
-#wpssgsqlite.db
+            wpssgdatasqlite.sql
+            wpssgsqlite.db
+            wp-content/uploads/wp2static-processed-site/
