@@ -13,8 +13,9 @@ jobs:
           sudo apt install php-cli php-mysql php-dom mysql-server sqlite3
           curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
           curl -o composer.phar https://getcomposer.org/installer
-          git clone https://github.com/dirtsimple/postmark
           curl -O -L https://github.com/elementor/wp2static/archive/refs/tags/7.2.tar.gz
+          git clone https://github.com/dirtsimple/postmark
+          git clone https://github.com/dumblob/mysql2sqlite 
       
       - name: Test
         run: |
@@ -32,6 +33,8 @@ jobs:
           php ./wp-cli.phar export --filename_format=exportWXR.xml
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-data --compact wpssgdb --result-file=wpssgdbddl.sql
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --xml --skip-extended-insert --no-create-info --compact wpssgdb wp_options --result-file=wpssgopts.xml
+          awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
+          python wpssgdata.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
 
           
           mkdir -p ./wp-content/plugins/wp2static # php wp-cli.phar plugin path
