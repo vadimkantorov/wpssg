@@ -15,7 +15,6 @@ jobs:
           curl -o composer.phar https://getcomposer.org/installer
           curl -O -L https://github.com/elementor/wp2static/archive/refs/tags/7.2.tar.gz
           git clone https://github.com/dirtsimple/postmark
-          git clone https://github.com/dumblob/mysql2sqlite 
       
       - name: Test
         run: |
@@ -31,12 +30,6 @@ jobs:
           #php ./wp-cli.phar theme install --activate https://knd.te-st.ru/kandinsky.zip
 
           php ./wp-cli.phar export --filename_format=exportWXR.xml
-          sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --xml --no-create-info --compact wpssgdb wp_options --result-file=wpssgopts.xml
-          
-          sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --no-data --compact wpssgdb --result-file=wpssgddl.sql
-          sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --no-create-info --compact wpssgdb --result-file=wpssgdata.sql
-          awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
-          python wpssgsqlite.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
 
           mkdir -p ./wp-content/plugins/wp2static # php wp-cli.phar plugin path
           tar -xf 7.2.tar.gz -C ./wp-content/plugins/wp2static --strip-components=1
@@ -64,6 +57,14 @@ jobs:
           #php ./wp-cli.phar post list --post_type=post --field=url
           #php ./wp-cli.phar server --host=localhost --port=8080 &
           #curl http://127.0.0.1:8080
+      
+      - name: Export to Sqlite
+        run: |
+          sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --xml --no-create-info --compact wpssgdb wp_options --result-file=wpssgopts.xml
+          sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --no-data --compact wpssgdb --result-file=wpssgddl.sql
+          sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --no-create-info --compact wpssgdb --result-file=wpssgdata.sql
+          git clone https://github.com/dumblob/mysql2sqlite && awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
+          python wpssgsqlite.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
        
       - name: Artifacts
         uses: actions/upload-artifact@v4
