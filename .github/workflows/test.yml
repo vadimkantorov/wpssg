@@ -16,7 +16,7 @@ jobs:
           curl -O -L https://github.com/elementor/wp2static/archive/refs/tags/7.2.tar.gz
           git clone https://github.com/dirtsimple/postmark
       
-      - name: Test
+      - name: Setup WordPress
         run: |
           sudo service mysql start
           sudo mysql -h 127.0.0.1 --user=root --password=root <<< "CREATE USER 'wpssguser'@'127.0.0.1' IDENTIFIED WITH mysql_native_password BY 'wpssgpass'; CREATE DATABASE wpssgdb; GRANT ALL PRIVILEGES ON wpssgdb.* TO 'wpssguser'@'127.0.0.1';"
@@ -31,7 +31,19 @@ jobs:
           
           php ./wp-cli.phar post list --post_type=page --field=url
           php ./wp-cli.phar post list --post_type=post --field=url
-          
+          php ./wp-cli.phar export --filename_format=exportWXR.xml
+
+      - name: Setup postmark
+        run: |
+          cp postmark_composer.json postmark/composer.json
+          sed -i 's@League\\CommonMark\\Ext\\Table\\TableExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
+          sed -i 's@League\\CommonMark\\Ext\\Strikethrough\\StrikethroughExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
+          sed -i 's@League\\CommonMark\\Ext\\SmartPunct\\SmartPunctExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
+          sed -i 's@Webuni\\CommonMark\\AttributesExtension\\AttributesExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
+          php ./wp-cli.phar package install ./postmark
+
+      - name: Setup wp2static
+        run: |
           mkdir -p ./wp-content/plugins/wp2static # php wp-cli.phar plugin path
           tar -xf 7.2.tar.gz -C ./wp-content/plugins/wp2static --strip-components=1
           cd ./wp-content/plugins/wp2static
@@ -43,23 +55,14 @@ jobs:
           cd  ../../../
           php ./wp-cli.phar plugin activate wp2static
           php ./wp-cli.phar wp2static options set deploymentURL http://localhost:8080/
-          
+      
+      - name: Run wp2static
+        run: |
           php ./wp-cli.phar server --host=localhost --port=8080 &
           sleep 5
           php ./wp-cli.phar wp2static detect
           php ./wp-cli.phar wp2static crawl
           php ./wp-cli.phar wp2static post_process
-
-          #curl http://127.0.0.1:8080
-          #cp postmark_composer.json postmark/composer.json
-          #sed -i 's@League\\CommonMark\\Ext\\Table\\TableExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
-          #sed -i 's@League\\CommonMark\\Ext\\Strikethrough\\StrikethroughExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
-          #sed -i 's@League\\CommonMark\\Ext\\SmartPunct\\SmartPunctExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
-          #sed -i 's@Webuni\\CommonMark\\AttributesExtension\\AttributesExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
-          #php ./wp-cli.phar package install ./postmark
-
-          
-          php ./wp-cli.phar export --filename_format=exportWXR.xml
       
       - name: Export to Sqlite
         run: |
@@ -67,7 +70,7 @@ jobs:
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --no-data --compact wpssgdb --result-file=wpssgddl.sql
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --no-create-info --compact wpssgdb --result-file=wpssgdata.sql && sed -e "s/\\\'/''/g" -e "s/_binary /X/g" wpssgdata.sql > wpssgdatasqlite.sql
           git clone https://github.com/mysql2sqlite/mysql2sqlite && awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
-          cat wpssgddlsqlite.sql wpssgdata.sql | sqlite3 wpssgsqlite.db
+          (cat wpssgddlsqlite.sql wpssgdata.sql | sqlite3 wpssgsqlite.db) || true
        
       - name: Artifacts
         uses: actions/upload-artifact@v4
