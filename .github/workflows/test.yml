@@ -40,11 +40,10 @@ jobs:
           cd  ../../../
 
           php ./wp-cli.phar plugin activate wp2static
-          php ./wp-cli.phar wp2static options set deploymentURL http://localhost:8080/
-          php ./wp-cli.phar wp2static detect
-          php ./wp-cli.phar wp2static crawl
-          php ./wp-cli.phar wp2static post_process
-          #open ./wp-content/uploads/wp2static-processed-site/index.html
+          #php ./wp-cli.phar wp2static options set deploymentURL http://localhost:8080/
+          #php ./wp-cli.phar wp2static detect
+          #php ./wp-cli.phar wp2static crawl
+          #php ./wp-cli.phar wp2static post_process
 
           #cp postmark_composer.json postmark/composer.json
           #sed -i 's@League\\CommonMark\\Ext\\Table\\TableExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
