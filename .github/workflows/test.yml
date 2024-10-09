@@ -31,6 +31,7 @@ jobs:
 
           php ./wp-cli.phar export --filename_format=exportWXR.xml
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-data --compact wpssgdb --result-file=wpssgdbddl.sql
+          sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --xml --skip-extended-insert --no-create-info --compact wpssgdb wp_options --result-file=wpssgopts.xml
 
           
           mkdir -p ./wp-content/plugins/wp2static # php wp-cli.phar plugin path
