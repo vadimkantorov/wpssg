@@ -8,7 +8,7 @@ curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.pha
 
 sudo service mysql start
 # create user and password
-sudo mysql <<< "CREATE USER 'wpssguser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'wpssgpass';"
+sudo mysql <<< "CREATE USER 'wpssguser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'wpssgpass'; GRANT ALL PRIVILEGES ON databasename.* TO 'wpssguser'@'localhost';"
 # test the local connection to the database
 sudo mysql <<< "SHOW DATABASES; SELECT user FROM mysql.user;"
 sudo mysql --user=wpssguser --password=wpssgpass --database=wpssgdb <<< "SHOW DATABASES"
