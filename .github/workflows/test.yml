@@ -39,8 +39,7 @@ jobs:
           php ../../../composer.phar build
           php ../../../composer.phar install --quiet --no-dev --optimize-autoloader
           cd  ../../../
-
-          #php ./wp-cli.phar plugin activate wp2static
+          php ./wp-cli.phar plugin activate wp2static
           #php ./wp-cli.phar wp2static options set deploymentURL http://localhost:8080/
           #php ./wp-cli.phar wp2static detect
           #php ./wp-cli.phar wp2static crawl
