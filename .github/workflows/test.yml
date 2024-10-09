@@ -38,7 +38,6 @@ jobs:
           awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
           python wpssgsqlite.py wpssgsqlite.db wpssgddlsqlite.sql wpssgdata.sql
 
-          
           mkdir -p ./wp-content/plugins/wp2static # php wp-cli.phar plugin path
           tar -xf 7.2.tar.gz -C ./wp-content/plugins/wp2static --strip-components=1
           cd ./wp-content/plugins/wp2static
@@ -66,7 +65,12 @@ jobs:
           #php ./wp-cli.phar server --host=localhost --port=8080 &
           #curl http://127.0.0.1:8080
        
-#      - name: Artifacts
-#        uses: actions/upload-artifact@v4
-#        with:
-#          path: wp-content/uploads/wp2static-processed-site/
+      - name: Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          #wp-content/uploads/wp2static-processed-site/
+          path: |
+            wpssgsqlite.db
+            wpssgddl.sql
+            wpssgdata.sql
+            wpssgddlsqlite.sql
