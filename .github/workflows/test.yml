@@ -22,7 +22,7 @@ jobs:
           sudo mysql -h 127.0.0.1 --user=root --password=root <<< "CREATE USER 'wpssguser'@'127.0.0.1' IDENTIFIED WITH mysql_native_password BY 'wpssgpass'; CREATE DATABASE wpssgdb; GRANT ALL PRIVILEGES ON wpssgdb.* TO 'wpssguser'@'127.0.0.1';"
           sudo mysql -h 127.0.0.1 --user=wpssguser --password=wpssgpass <<< "SHOW DATABASES"
 
-          php ./wp-cli.phar core download --locale=en_US #  --skip-content --force
+          php ./wp-cli.phar core download --locale=en_US      --skip-content --force
           php ./wp-cli.phar config create --locale=en_US --dbuser=wpssguser --dbpass=wpssgpass --dbname=wpssgdb --dbhost=127.0.0.1
           #php ./wp-cli.phar db create
           php ./wp-cli.phar core install --url=localhost:8080 --title=wpcli --admin_user=wpcli --admin_password=wpcli --admin_email=info@wp-cli.org
@@ -40,6 +40,7 @@ jobs:
           sed -i 's@League\\CommonMark\\Ext\\SmartPunct\\SmartPunctExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
           sed -i 's@Webuni\\CommonMark\\AttributesExtension\\AttributesExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
           php ./wp-cli.phar package install ./postmark
+          php wp-cli.phar postmark tree _posts
           php ./wp-cli.phar export --filename_format=exportWXR.xml
 
       - name: Setup wp2static
@@ -71,7 +72,7 @@ jobs:
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --no-create-info --compact wpssgdb --result-file=wpssgdata.sql && sed -e "s/\\\'/''/g" -e "s/_binary //g" wpssgdata.sql > wpssgdatasqlite.sql
           git clone https://github.com/mysql2sqlite/mysql2sqlite && awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
           sqlite3 wpssgsqlite.db < wpssgddlsqlite.sql
-          (cat wpssgdatasqlite.sql | sqlite3 wpssgsqlite.db) || true
+          sqlite3 wpssgsqlite.db < wpssgdatasqlite.sql
        
       - name: Artifacts
         uses: actions/upload-artifact@v4
