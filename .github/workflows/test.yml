@@ -36,6 +36,7 @@ jobs:
           cd ./wp-content/plugins/wp2static
           php ../../../composer.phar install
           php ../../../composer.phar update
+          php ../../../composer.phar build
           php ../../../composer.phar install --quiet --no-dev --optimize-autoloader
           cd  ../../../
 
