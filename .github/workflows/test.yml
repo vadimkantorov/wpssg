@@ -29,9 +29,11 @@ jobs:
           php ./wp-cli.phar option set permalink_structure '/%year%-%monthnum%-%day%-%postname%/'
           php ./wp-cli.phar theme install --activate https://knd.te-st.ru/kandinsky.zip
           
-          mkdir -p wp-content/plugins/wp2static # php wp-cli.phar plugin path
-          tar -xf 7.2.tar.gz -C wp-content/plugins/wp2static --strip-components=1
-          cd wp-content/plugins/wp2static
+          find
+
+          mkdir -p ./wp-content/plugins/wp2static # php wp-cli.phar plugin path
+          tar -xf 7.2.tar.gz -C ./wp-content/plugins/wp2static --strip-components=1
+          cd ./wp-content/plugins/wp2static
           php ../../../composer.phar install
           php ../../../composer.phar update
           php ../../../composer.phar install --quiet --no-dev --optimize-autoloader
@@ -44,15 +46,15 @@ jobs:
           php ./wp-cli.phar wp2static post_process
           #open ./wp-content/uploads/wp2static-processed-site/index.html
 
-          cp postmark_composer.json postmark/composer.json
-          sed -i 's@League\\CommonMark\\Ext\\Table\\TableExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
-          sed -i 's@League\\CommonMark\\Ext\\Strikethrough\\StrikethroughExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
-          sed -i 's@League\\CommonMark\\Ext\\SmartPunct\\SmartPunctExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
-          sed -i 's@Webuni\\CommonMark\\AttributesExtension\\AttributesExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
-          php ./wp-cli.phar package install ./postmark
+          #cp postmark_composer.json postmark/composer.json
+          #sed -i 's@League\\CommonMark\\Ext\\Table\\TableExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
+          #sed -i 's@League\\CommonMark\\Ext\\Strikethrough\\StrikethroughExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
+          #sed -i 's@League\\CommonMark\\Ext\\SmartPunct\\SmartPunctExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
+          #sed -i 's@Webuni\\CommonMark\\AttributesExtension\\AttributesExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
+          #php ./wp-cli.phar package install ./postmark
 
-          php ./wp-cli.phar post list --post_type=page --field=url
-          php ./wp-cli.phar post list --post_type=post --field=url
+          #php ./wp-cli.phar post list --post_type=page --field=url
+          #php ./wp-cli.phar post list --post_type=post --field=url
           #php ./wp-cli.phar server --host=localhost --port=8080 &
           #curl http://127.0.0.1:8080
        
