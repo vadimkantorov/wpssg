@@ -20,9 +20,13 @@ jobs:
         run: |
           sudo service mysql start
           sudo mysql -h 127.0.0.1 --user=root --password=root <<< "CREATE USER 'wpssguser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'wpssgpass';"
-          sudo mysql -h 127.0.0.1 --user=root --password=root <<< "SHOW DATABASES; SELECT user FROM mysql.user;"
           sudo mysql -h 127.0.0.1 --user=wpssguser --password=wpssgpass <<< "SHOW DATABASES"
-          #sudo mysql -h 127.0.0.1 --user=wpssguser --password=wpssgpass --database=wpssgdb <<< "SHOW DATABASES"
+
+          php ./wp-cli.phar core download --locale=en_US #  --skip-content --force
+          php ./wp-cli.phar config create --locale=en_US --dbuser=wpssguser --dbpass=wpssgpass --dbname=wpssgdb --dbhost=127.0.0.1
+          php ./wp-cli.phar db create
+          php ./wp-cli.phar core install --url=localhost:8080 --title=wpcli --admin_user=wpcli --admin_password=wpcli --admin_email=info@wp-cli.org
+          php wp-cli.phar option set permalink_structure '/%year%-%monthnum%-%day%-%postname%/'
        
 #      - name: Artifacts
 #        uses: actions/upload-artifact@v4
