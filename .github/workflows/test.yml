@@ -19,7 +19,7 @@ jobs:
       - name: Test
         run: |
           sudo service mysql start
-          sudo mysql -h 127.0.0.1 <<< "CREATE USER 'wpssguser'@'127.0.0.1' IDENTIFIED WITH mysql_native_password BY 'wpssgpass';"
+          sudo mysql -h 127.0.0.1 --user=root --password=root <<< "CREATE USER 'wpssguser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'wpssgpass';"
           #sudo mysql -h 127.0.0.1 <<< "CREATE USER 'wpssguser'@'localhost' IDENTIFIED WITH mysql_native_password BY 'wpssgpass';"
           #sudo mysql -h 127.0.0.1 <<< "SHOW DATABASES; SELECT user FROM mysql.user;"
           #sudo mysql -h 127.0.0.1 --user=wpssguser --password=wpssgpass --database=wpssgdb <<< "SHOW DATABASES"
