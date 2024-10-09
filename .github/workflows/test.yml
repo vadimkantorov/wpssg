@@ -28,8 +28,12 @@ jobs:
           php ./wp-cli.phar core install --url=localhost:8080 --title=wpcli --admin_user=wpcli --admin_password=wpcli --admin_email=info@wp-cli.org
           php ./wp-cli.phar option set permalink_structure '/%year%-%monthnum%-%day%-%postname%/'
           #php ./wp-cli.phar theme install --activate https://knd.te-st.ru/kandinsky.zip
-
-          php ./wp-cli.phar export --filename_format=exportWXR.xml
+          
+          php ./wp-cli.phar post list --post_type=page --field=url
+          php ./wp-cli.phar post list --post_type=post --field=url
+          
+          php ./wp-cli.phar server --host=localhost --port=8080 &
+          sleep 5
 
           mkdir -p ./wp-content/plugins/wp2static # php wp-cli.phar plugin path
           tar -xf 7.2.tar.gz -C ./wp-content/plugins/wp2static --strip-components=1
@@ -43,9 +47,10 @@ jobs:
           php ./wp-cli.phar plugin activate wp2static
           php ./wp-cli.phar wp2static options set deploymentURL http://localhost:8080/
           php ./wp-cli.phar wp2static detect
-          #php ./wp-cli.phar wp2static crawl
-          #php ./wp-cli.phar wp2static post_process
+          php ./wp-cli.phar wp2static crawl
+          php ./wp-cli.phar wp2static post_process
 
+          #curl http://127.0.0.1:8080
           #cp postmark_composer.json postmark/composer.json
           #sed -i 's@League\\CommonMark\\Ext\\Table\\TableExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
           #sed -i 's@League\\CommonMark\\Ext\\Strikethrough\\StrikethroughExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
@@ -53,13 +58,12 @@ jobs:
           #sed -i 's@Webuni\\CommonMark\\AttributesExtension\\AttributesExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
           #php ./wp-cli.phar package install ./postmark
 
-          #php ./wp-cli.phar post list --post_type=page --field=url
-          #php ./wp-cli.phar post list --post_type=post --field=url
-          #php ./wp-cli.phar server --host=localhost --port=8080 &
-          #curl http://127.0.0.1:8080
+          
+          php ./wp-cli.phar export --filename_format=exportWXR.xml
       
       - name: Export to Sqlite
         run: |
+
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --hex-blob --xml --no-create-info --compact wpssgdb wp_options --result-file=wpssgopts.xml
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --hex-blob --no-data --compact wpssgdb --result-file=wpssgddl.sql
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --hex-blob --no-create-info --compact wpssgdb --result-file=wpssgdata.sql
@@ -71,6 +75,7 @@ jobs:
         with:
           #wp-content/uploads/wp2static-processed-site/
           path: |
+            exportWXR.xml 
             wpssgopts.xml
             wpssgddl.sql
             wpssgdata.sql
