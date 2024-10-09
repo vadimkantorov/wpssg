@@ -26,7 +26,13 @@ jobs:
           php ./wp-cli.phar config create --locale=en_US --dbuser=wpssguser --dbpass=wpssgpass --dbname=wpssgdb --dbhost=127.0.0.1
           #php ./wp-cli.phar db create
           php ./wp-cli.phar core install --url=localhost:8080 --title=wpcli --admin_user=wpcli --admin_password=wpcli --admin_email=info@wp-cli.org
-          php wp-cli.phar option set permalink_structure '/%year%-%monthnum%-%day%-%postname%/'
+          php ./wp-cli.phar option set permalink_structure '/%year%-%monthnum%-%day%-%postname%/'
+          php ./wp-cli.phar theme install --activate https://knd.te-st.ru/kandinsky.zip
+          php ./wp-cli.phar post list --post_type=page --field=url
+          php ./wp-cli.phar post list --post_type=post --field=url
+          
+          php ./wp-cli.phar server --host=localhost --port=8080
+          curl http://127.0.0.1:8080
        
 #      - name: Artifacts
 #        uses: actions/upload-artifact@v4
