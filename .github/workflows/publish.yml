@@ -87,7 +87,7 @@ jobs:
         run: |
           php wp-cli.phar plugin path
           mkdir -p ./wp-content/plugins/wp2static
-          curl -O -L https://github.com/elementor/wp2static/archive/refs/tags/7.2.tar.gz | tar -xzf - -C ./wp-content/plugins/wp2static --strip-components=1
+          curl -L https://github.com/elementor/wp2static/archive/refs/tags/7.2.tar.gz | tar -xzf - -C ./wp-content/plugins/wp2static --strip-components=1
           cd ./wp-content/plugins/wp2static
           curl -o composer.phar https://getcomposer.org/installer
           php composer.phar install
