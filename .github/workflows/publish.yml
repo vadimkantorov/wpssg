@@ -71,6 +71,7 @@ jobs:
           echo ListPage && php ./wp-cli.phar post list --post_type=page --field=url
           echo ListPost && php ./wp-cli.phar post list --post_type=post --field=url
           php ./wp-cli.phar export --filename_format=exportWXR.xml
+          php ./wp-cli.phar option list --format=json > exportOPTIONS.json
       
       - name: Export to Sqlite
         run: |
@@ -91,7 +92,7 @@ jobs:
           curl -o composer.phar https://getcomposer.org/installer
           php composer.phar install
           php composer.phar update
-          php composer.phar build
+          #php composer.phar build
           php composer.phar install --quiet --no-dev --optimize-autoloader
           cd  ../../../
           php ./wp-cli.phar plugin activate wp2static
@@ -112,7 +113,8 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: |
-            exportWXR.xml 
+            exportWXR.xml
+            exportOPTIONS.json
             wpssgopts.xml
             wpssgddl.sql
             wpssgdata.sql
