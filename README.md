@@ -280,3 +280,4 @@ END TRANSACTION;
 - https://gist.github.com/esperlu/943776
 
 - https://github.com/jekyll/minima/tree/demo-site
+- https://stackoverflow.com/questions/18772504/wp-insert-post-error-content-title-and-excerpt-are-empty
