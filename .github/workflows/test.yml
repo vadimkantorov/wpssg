@@ -15,7 +15,8 @@ jobs:
           curl -o composer.phar https://getcomposer.org/installer
           curl -O -L https://github.com/elementor/wp2static/archive/refs/tags/7.2.tar.gz
           git clone https://github.com/dirtsimple/postmark
-      
+          git clone https://github.com/mysql2sqlite/mysql2sqlite 
+
       - name: Setup WordPress
         run: |
           sudo service mysql start
@@ -28,9 +29,6 @@ jobs:
           php ./wp-cli.phar core install --url=localhost:8080 --title=wpcli --admin_user=wpcli --admin_password=wpcli --admin_email=info@wp-cli.org
           php ./wp-cli.phar option set permalink_structure '/%year%-%monthnum%-%day%-%postname%/'
           #php ./wp-cli.phar theme install --activate https://knd.te-st.ru/kandinsky.zip
-          
-          php ./wp-cli.phar post list --post_type=page --field=url
-          php ./wp-cli.phar post list --post_type=post --field=url
 
       - name: Setup postmark
         run: |
@@ -40,7 +38,10 @@ jobs:
           sed -i 's@League\\CommonMark\\Ext\\SmartPunct\\SmartPunctExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
           sed -i 's@Webuni\\CommonMark\\AttributesExtension\\AttributesExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
           php ./wp-cli.phar package install ./postmark
-          php wp-cli.phar postmark tree _posts
+          php ./wp-cli.phar postmark tree _posts
+          
+          php ./wp-cli.phar post list --post_type=page --field=url
+          php ./wp-cli.phar post list --post_type=post --field=url
           php ./wp-cli.phar export --filename_format=exportWXR.xml
 
       - name: Setup wp2static
@@ -70,7 +71,7 @@ jobs:
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --xml --no-create-info --compact wpssgdb wp_options --result-file=wpssgopts.xml
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --no-data --compact wpssgdb --result-file=wpssgddl.sql
           sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --no-create-info --compact wpssgdb --result-file=wpssgdata.sql && sed -e "s/\\\'/''/g" -e "s/_binary //g" wpssgdata.sql > wpssgdatasqlite.sql
-          git clone https://github.com/mysql2sqlite/mysql2sqlite && awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
+          awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
           sqlite3 wpssgsqlite.db < wpssgddlsqlite.sql
           sqlite3 wpssgsqlite.db < wpssgdatasqlite.sql
        
