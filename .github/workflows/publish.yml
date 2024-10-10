@@ -33,7 +33,7 @@ jobs:
       
       - name: Prerequisites
         run: |
-          sudo apt install php-cli php-mysql php-dom mysql-server sqlite3
+          sudo apt install php-cli php-mysql php-dom mysql-server sqlite3 jq
           curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
       - name: Setup WordPress
@@ -71,7 +71,7 @@ jobs:
           echo ListPage && php ./wp-cli.phar post list --post_type=page --field=url
           echo ListPost && php ./wp-cli.phar post list --post_type=post --field=url
           php ./wp-cli.phar export --filename_format=exportWXR.xml
-          php ./wp-cli.phar option list --format=json > exportOPTIONS.json
+          php ./wp-cli.phar option list --format=json > _exportOPTIONS.json && jq . _exportOPTIONS.json > exportOPTIONS.json 
       
       - name: Export to Sqlite
         run: |
@@ -93,7 +93,7 @@ jobs:
           php composer.phar install
           php composer.phar update
           #php composer.phar build
-          php composer.phar install --quiet --no-dev --optimize-autoloader
+          php composer.phar install --no-dev --optimize-autoloader #--quiet 
           cd  ../../../
           php ./wp-cli.phar plugin activate wp2static
           php ./wp-cli.phar wp2static options set deploymentURL "https://${{github.repository_owner}}.github.io${{steps.pages.outputs.base_path}}/" #http://localhost:8080/
