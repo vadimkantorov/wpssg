@@ -91,7 +91,6 @@ jobs:
           curl -o composer.phar https://getcomposer.org/installer
           php composer.phar update
           php composer.phar install
-          #php composer.phar install --no-dev --optimize-autoloader #--quiet 
           cd  ../../../
           php ./wp-cli.phar plugin activate wp2static
           php ./wp-cli.phar wp2static options set deploymentURL "https://${{github.repository_owner}}.github.io${{steps.pages.outputs.base_path}}/" #http://localhost:8080/
