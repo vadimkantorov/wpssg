@@ -65,8 +65,9 @@ jobs:
           sed -i 's@WP_CLI\\Entity\\RecursiveDataStructureTraverser@WP_CLI\\Traverser\\RecursiveDataStructureTraverser@' ~/.wp-cli/packages/vendor/dirtsimple/imposer/src/Scheduler.php
           sed -i 's@WP_CLI\\Entity\\NonExistentKeyException@WP_CLI\\Exception\\NonExistentKeyException@' ~/.wp-cli/packages/vendor/dirtsimple/imposer/src/Scheduler.php
           
-          php ./wp-cli.phar post delete $(php ./wp-cli.phar post list --post_type='post' --format=ids) --force
+          php ./wp-cli.phar post delete --force $(php ./wp-cli.phar post list --post_type='post' --format=ids) $(php ./wp-cli.phar post list --post_type='page' --format=ids)
           php ./wp-cli.phar postmark tree ./_posts/
+          php ./wp-cli.phar postmark sync index.md about.md
           
           echo ListPage && php ./wp-cli.phar post list --post_type=page --field=url
           echo ListPost && php ./wp-cli.phar post list --post_type=post --field=url

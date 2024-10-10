@@ -1,6 +1,8 @@
 ---
 layout: home
-title: indexA
+Title: indexA
+WP-Type: page
+Set-Options: page_on_front
 ---
 # indexB
 
