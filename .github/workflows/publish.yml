@@ -55,8 +55,55 @@ jobs:
 
       - name: Setup postmark
         run: |
+          tee postmark/composer.json <<EOF
+{
+    "name": "dirtsimple/postmark",
+    "description": "Sync WP content from Markdown files",
+    "type": "wp-cli-package",
+    "homepage": "https://github.com/dirtsimple/postmark/",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "PJ Eby",
+            "homepage": "https://github.com/pjeby"
+        }
+    ],
+    "keywords": [
+        "markdown",
+        "wordpress",
+        "wp",
+        "wp-cli",
+        "yaml",
+        "front-matter",
+        "content-management",
+        "configuration-management",
+        "static-site-generator",
+        "yaml front matter"
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "autoload": {
+        "files": [ "command.php" ],
+        "psr-4": {
+            "dirtsimple\\Postmark\\": "src/"
+        }
+    },
+    "require": {
+        "dirtsimple/clean-yaml": "^0.1",
+        "dirtsimple/imposer": "dev-master",
+        "wp-cli/wp-cli": "*",
+        "wp-cli/entity-command": "*",
+        "rarst/wpdatetime": "*",
+        "league/commonmark": "^1.0",
+        "twig/twig": "*",
+        "symfony/yaml": "*",
+        "php": "*"
+    }
+}
+          EOF
+
           #cp postmark_composer.json postmark/composer.json
-          sed -e 's@"league/commonmark-ext-smartpunct": "^1.1",@@' -e 's@"league/commonmark-ext-strikethrough": "^1.0",@@' -e 's@"league/commonmark-ext-table": "^2.1",@@' -e 's@"webuni/commonmark-attributes-extension": "^1.0",@@' -e 's@\^2\.4@*@' -e 's@\^3\.4@*@'  -e 's@\^7\.1@*@' -e 's@\^0\.3\.0@*@' -e 's@\^2@*@' -i ./postmark/composer.json
+          #sed -e 's@"league/commonmark-ext-smartpunct": "^1.1",@@' -e 's@"league/commonmark-ext-strikethrough": "^1.0",@@' -e 's@"league/commonmark-ext-table": "^2.1",@@' -e 's@"webuni/commonmark-attributes-extension": "^1.0",@@' -e 's@\^2\.4@*@' -e 's@\^3\.4@*@'  -e 's@\^7\.1@*@' -e 's@\^0\.3\.0@*@' -e 's@\^2@*@' -i ./postmark/composer.json
           sed -i 's@League\\CommonMark\\Ext\\Table\\TableExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
           sed -i 's@League\\CommonMark\\Ext\\Strikethrough\\StrikethroughExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
           sed -i 's@League\\CommonMark\\Ext\\SmartPunct\\SmartPunctExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
