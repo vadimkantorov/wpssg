@@ -47,7 +47,8 @@ jobs:
           #php ./wp-cli.phar db create
           php ./wp-cli.phar core install --url=localhost:8080 --title=wpcli --admin_user=wpcli --admin_password=wpcli --admin_email=info@wp-cli.org
           php ./wp-cli.phar option set permalink_structure '/%year%-%monthnum%-%day%-%postname%/'
-          #php ./wp-cli.phar theme install --activate https://knd.te-st.ru/kandinsky.zip
+          
+          php ./wp-cli.phar theme install --activate https://knd.te-st.ru/kandinsky.zip
 
       - name: Setup postmark
         run: |
@@ -91,7 +92,6 @@ jobs:
           curl -o composer.phar https://getcomposer.org/installer
           php composer.phar update
           php composer.phar install
-          #php composer.phar update
           cd  ../../../
           php ./wp-cli.phar plugin activate wp2static
           php ./wp-cli.phar wp2static options set deploymentURL "https://${{github.repository_owner}}.github.io${{steps.pages.outputs.base_path}}/" #http://localhost:8080/
