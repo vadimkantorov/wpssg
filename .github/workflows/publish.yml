@@ -60,6 +60,8 @@ jobs:
           sed -i 's@League\\CommonMark\\Ext\\Strikethrough\\StrikethroughExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
           sed -i 's@League\\CommonMark\\Ext\\SmartPunct\\SmartPunctExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
           sed -i 's@Webuni\\CommonMark\\AttributesExtension\\AttributesExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
+          sed -i 's@WP_CLI\\Entity\\RecursiveDataStructureTraverser@WP_CLI\\Traverser\\RecursiveDataStructureTraverser@' ./postmark/src/Option.php
+          
           php ./wp-cli.phar package install ./postmark
 
           sed -i 's@WP_CLI\\Entity\\RecursiveDataStructureTraverser@WP_CLI\\Traverser\\RecursiveDataStructureTraverser@' ~/.wp-cli/packages/vendor/dirtsimple/imposer/src/Scheduler.php
