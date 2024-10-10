@@ -89,8 +89,9 @@ jobs:
           curl -L https://github.com/elementor/wp2static/archive/refs/tags/7.2.tar.gz | tar -xzf - -C ./wp-content/plugins/wp2static --strip-components=1
           cd ./wp-content/plugins/wp2static
           curl -o composer.phar https://getcomposer.org/installer
-          php composer.phar update
+          #php composer.phar update
           php composer.phar install
+          #php composer.phar update
           cd  ../../../
           php ./wp-cli.phar plugin activate wp2static
           php ./wp-cli.phar wp2static options set deploymentURL "https://${{github.repository_owner}}.github.io${{steps.pages.outputs.base_path}}/" #http://localhost:8080/
