@@ -124,3 +124,5 @@ conn.commit()
 - https://github.com/WordPress/sqlite-database-integration/pull/157
 - https://bugs.mysql.com/bug.php?id=65941
 - https://gist.github.com/esperlu/943776
+
+- https://github.com/jekyll/minima/tree/demo-site
