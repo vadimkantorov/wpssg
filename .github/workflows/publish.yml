@@ -55,7 +55,7 @@ jobs:
 
       - name: Setup postmark
         run: |
-          tee postmark/composer.json <<EOF
+          tee ./postmark/composer.json <<EOF
 {
     "name": "dirtsimple/postmark",
     "description": "Sync WP content from Markdown files",
@@ -100,7 +100,7 @@ jobs:
         "php": "*"
     }
 }
-          EOF
+EOF
 
           #cp postmark_composer.json postmark/composer.json
           #sed -e 's@"league/commonmark-ext-smartpunct": "^1.1",@@' -e 's@"league/commonmark-ext-strikethrough": "^1.0",@@' -e 's@"league/commonmark-ext-table": "^2.1",@@' -e 's@"webuni/commonmark-attributes-extension": "^1.0",@@' -e 's@\^2\.4@*@' -e 's@\^3\.4@*@'  -e 's@\^7\.1@*@' -e 's@\^0\.3\.0@*@' -e 's@\^2@*@' -i ./postmark/composer.json
