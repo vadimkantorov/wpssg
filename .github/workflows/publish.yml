@@ -106,6 +106,8 @@ jobs:
           php ./wp-cli.phar wp2static crawl
           php ./wp-cli.phar wp2static post_process
           mv ./wp-content/uploads/wp2static-processed-site _site
+# wget --recursive --html-extension http://localhost:8080
+# wget -P wpssgmirror -nd --mirror --convert-links --adjust-extension --page-requisites  --no-parent  --restrict-file-names=ascii,windows http://localhost:8080
        
       - name: Artifacts
         uses: actions/upload-artifact@v4
