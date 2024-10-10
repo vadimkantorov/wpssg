@@ -92,7 +92,7 @@ jobs:
           php composer.phar install --quiet --no-dev --optimize-autoloader
           cd  ../../../
           php ./wp-cli.phar plugin activate wp2static
-          php ./wp-cli.phar wp2static options set deploymentURL http://localhost:8080/
+          php ./wp-cli.phar wp2static options set deploymentURL "https://${{github.repository_owner}}.github.io/${{steps.pages.outputs.base_path}}" #http://localhost:8080/
       
       - name: Run wp2static
         run: |
