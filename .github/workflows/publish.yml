@@ -71,8 +71,12 @@ jobs:
           
           echo ListPage && php ./wp-cli.phar post list --post_type=page --field=url
           echo ListPost && php ./wp-cli.phar post list --post_type=post --field=url
+          
+          mkdir ./exportPOSTMARK/
+          php ./wp-cli.phar postmark export --dir=./exportPOSTMARK/ $(php ./wp-cli.phar post list --post_type='post' --format=ids)
           php ./wp-cli.phar export --filename_format=exportWXR.xml
-          php ./wp-cli.phar option list --format=json > _exportOPTIONS.json && jq . _exportOPTIONS.json > exportOPTIONS.json 
+          php ./wp-cli.phar option list --format=json > _exportOPTIONS.json && jq . _exportOPTIONS.json > exportOPTIONS.json
+ 
       
       - name: Export to Sqlite
         run: |
@@ -86,7 +90,7 @@ jobs:
 
       - name: Setup wp2static
         run: |
-          mkdir -p ./wp-content/plugins/wp2static # $(php wp-cli.phar plugin path)/wp2static
+          mkdir ./wp-content/plugins/wp2static # $(php wp-cli.phar plugin path)/wp2static
           curl -L https://github.com/elementor/wp2static/archive/refs/tags/7.2.tar.gz | tar -xzf - -C ./wp-content/plugins/wp2static --strip-components=1
           cd ./wp-content/plugins/wp2static
           curl -o composer.phar https://getcomposer.org/installer
@@ -94,7 +98,7 @@ jobs:
           php composer.phar install
           cd  ../../../
           php ./wp-cli.phar plugin activate wp2static
-          php ./wp-cli.phar wp2static options set deploymentURL "https://${{github.repository_owner}}.github.io${{steps.pages.outputs.base_path}}/" #http://localhost:8080/
+          php ./wp-cli.phar wp2static options set deploymentURL "https://${{github.repository_owner}}.github.io${{steps.pages.outputs.base_path}}/"
       
       - name: Run wp2static
         run: |
@@ -111,6 +115,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           path: |
+            exportPOSTMARK/
             exportWXR.xml
             exportOPTIONS.json
             wpssgopts.xml
