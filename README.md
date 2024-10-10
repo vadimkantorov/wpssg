@@ -2,8 +2,9 @@
 Please see [`.github/workflows/publish.yml`](.github/workflows/publish.yml) for the code
 
 Currently uses:
+- https://github.com/wp-cli/wp-cli for headless WordPress installation and management
 - https://github.com/dirtsimple/postmark for Markdown import
-- https://github.com/elementor/wp2static for static website crawling
+- https://github.com/elementor/wp2static for static WordPress crawling
 
 # WordPress SQL schema
 ```sql
