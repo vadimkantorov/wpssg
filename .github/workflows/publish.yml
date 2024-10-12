@@ -53,17 +53,7 @@ jobs:
       - name: Setup postmark
         run: |
           git clone https://github.com/dirtsimple/postmark
-          #sed -e 's@"league/commonmark-ext-smartpunct": "^1.1",@@' -e 's@"league/commonmark-ext-strikethrough": "^1.0",@@' -e 's@"league/commonmark-ext-table": "^2.1",@@' -e 's@"webuni/commonmark-attributes-extension": "^1.0",@@' -e 's@\^2\.4@*@' -e 's@\^3\.4@*@'  -e 's@\^7\.1@*@' -e 's@\^0\.3\.0@*@' -e 's@\^2@*@' -i ./postmark/composer.json
-          #sed -i 's@League\\CommonMark\\Ext\\Table\\TableExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
-          #sed -i 's@League\\CommonMark\\Ext\\Strikethrough\\StrikethroughExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
-          #sed -i 's@League\\CommonMark\\Ext\\SmartPunct\\SmartPunctExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
-          #sed -i 's@Webuni\\CommonMark\\AttributesExtension\\AttributesExtension@dirtsimple\\Postmark\\ShortcodeParser@g' ./postmark/src/Formatter.php
-          #sed -i 's@WP_CLI\\Entity\\RecursiveDataStructureTraverser@WP_CLI\\Traverser\\RecursiveDataStructureTraverser@' ./postmark/src/Option.php
-          
           php ./wp-cli.phar package install ./postmark
-
-          #sed -i 's@WP_CLI\\Entity\\RecursiveDataStructureTraverser@WP_CLI\\Traverser\\RecursiveDataStructureTraverser@' ~/.wp-cli/packages/vendor/dirtsimple/imposer/src/Scheduler.php
-          #sed -i 's@WP_CLI\\Entity\\NonExistentKeyException@WP_CLI\\Exception\\NonExistentKeyException@' ~/.wp-cli/packages/vendor/dirtsimple/imposer/src/Scheduler.php
           
           php ./wp-cli.phar post delete --force $(php ./wp-cli.phar post list --post_type='post' --format=ids) $(php ./wp-cli.phar post list --post_type='page' --format=ids)
           php ./wp-cli.phar postmark tree ./_posts/
