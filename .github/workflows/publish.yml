@@ -57,10 +57,9 @@ jobs:
           
           php ./wp-cli.phar post delete --force $(php ./wp-cli.phar post list --post_type='post' --format=ids) $(php ./wp-cli.phar post list --post_type='page' --format=ids)
           php ./wp-cli.phar postmark tree ./_posts/
-          php ./wp-cli.phar postmark sync index.md about.md
+          php ./wp-cli.phar postmark sync ./index.md ./about.md
           
-          echo ListPage && php ./wp-cli.phar post list --post_type=page --field=url
-          echo ListPost && php ./wp-cli.phar post list --post_type=post --field=url
+          # php ./wp-cli.phar post list --post_type=page --field=url && php ./wp-cli.phar post list --post_type=post --field=url
           
           mkdir ./exportPOSTMARK/
           php ./wp-cli.phar postmark export --dir=./exportPOSTMARK/ $(php ./wp-cli.phar post list --post_type='post' --format=ids)
