@@ -70,12 +70,14 @@ jobs:
       - name: Export to Sqlite
         run: |
           git clone https://github.com/mysql2sqlite/mysql2sqlite 
-          sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --xml --no-create-info --compact wpssgdb wp_options --result-file=wpssgopts.xml
-          sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --no-data --compact wpssgdb --result-file=wpssgddl.sql
-          sudo mysqldump -h 127.0.0.1 --user=wpssguser --password=wpssgpass --skip-extended-insert --no-tablespaces --no-create-info --compact wpssgdb --result-file=wpssgdata.sql && sed -e "s/\\\'/''/g" -e "s/_binary //g" wpssgdata.sql > wpssgdatasqlite.sql
+          sudo mysqldump $MYSQLDUMPCONNSTR --skip-extended-insert --no-tablespaces --compact wpssgdb --xml --no-create-info wp_options --result-file=wpssgopts.xml
+          sudo mysqldump $MYSQLDUMPCONNSTR --skip-extended-insert --no-tablespaces --compact wpssgdb --no-data --result-file=wpssgddl.sql
+          sudo mysqldump $MYSQLDUMPCONNSTR --skip-extended-insert --no-tablespaces --compact wpssgdb --no-create-info--result-file=wpssgdata.sql && sed -e "s/\\\'/''/g" -e "s/_binary //g" wpssgdata.sql > wpssgdatasqlite.sql
           awk -f mysql2sqlite/mysql2sqlite wpssgddl.sql | sed s'/PRAGMA journal_mode = MEMORY/PRAGMA journal_mode = DELETE/' > wpssgddlsqlite.sql
           sqlite3 wpssgsqlite.db < wpssgddlsqlite.sql
           sqlite3 wpssgsqlite.db < wpssgdatasqlite.sql
+        env:
+          MYSQLDUMPCONNSTR: "-h 127.0.0.1 --user=wpssguser --password=wpssgpass"
 
       - name: Setup wp2static
         run: |
