@@ -193,3 +193,4 @@ END TRANSACTION;
 - https://github.com/jekyll/minima/tree/demo-site
 - https://stackoverflow.com/questions/18772504/wp-insert-post-error-content-title-and-excerpt-are-empty
 - https://github.com/dirtsimple/postmark/issues/4
+- https://web.archive.org/web/20230929192125/https://wp2static.com/compiling-from-source/
