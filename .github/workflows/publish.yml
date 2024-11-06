@@ -68,7 +68,8 @@ jobs:
           php ./wp-cli.phar export --filename_format=exportWXR.xml
           php ./wp-cli.phar option list --format=json | jq '.' > exportOPTIONS.json
           #
-          jq -r '.[] | [ .option_name, (.option_value | @json) ] | @tsv' exportOPTIONS.json | tr '\t' '\0' | tr '\n' '\0' | xargs -0 -n2 python -c 'import sys,json;print(sys.argv[1],sys.argv[2]);json.loads(sys.argv[2])' #php ./wp-cli.phar option update --format=json
+          jq -r '.[] | [ .option_name, .option_value ] | @tsv' exportOPTIONS.json | tr '\t' '\0' | tr '\n' '\0' | xargs -0 -n2 php ./wp-cli.phar option update #python -c 'import sys,json;print(sys.argv[1],sys.argv[2], flush=True);json.loads(sys.argv[2])' #php ./wp-cli.phar option update --format=json
+          #jq -r '.[] | [ .option_name, (.option_value | @json) ] | @tsv' exportOPTIONS.json | tr '\t' '\0' | tr '\n' '\0' | xargs -0 -n2 php ./wp-cli.phar option update #python -c 'import sys,json;print(sys.argv[1],sys.argv[2], flush=True);json.loads(sys.argv[2])' #php ./wp-cli.phar option update --format=json
  
       - name: Export to Sqlite
         run: |
