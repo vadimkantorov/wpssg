@@ -68,7 +68,7 @@ jobs:
           php ./wp-cli.phar export --filename_format=exportWXR.xml
           php ./wp-cli.phar option list --format=json | jq '.' > exportOPTIONS.json
           #
-          cat exportOPTIONS.json | python -c 'import json,sys,subprocess;for el in json.load(sys.stdin):subprocess.run(["php","./wp-cli.phar","option","update",el["option_name",el["option_value"]]])'
+          cat exportOPTIONS.json | python -c 'import json,sys,subprocess;for el in json.load(sys.stdin):subprocess.run(["php","./wp-cli.phar","option","update",el["option_name"],el["option_value"]])'
           #jq -r '.[] | [ .option_name, .option_value ] | @tsv' exportOPTIONS.json | tr '\t' '\0' | tr '\n' '\0' | xargs -0 -n2 php ./wp-cli.phar option update #python -c 'import sys,json;print(sys.argv[1],sys.argv[2], flush=True);json.loads(sys.argv[2])' #php ./wp-cli.phar option update --format=json
           #jq -r '.[] | [ .option_name, (.option_value | @json) ] | @tsv' exportOPTIONS.json | tr '\t' '\0' | tr '\n' '\0' | xargs -0 -n2 php ./wp-cli.phar option update #python -c 'import sys,json;print(sys.argv[1],sys.argv[2], flush=True);json.loads(sys.argv[2])' #php ./wp-cli.phar option update --format=json
  
