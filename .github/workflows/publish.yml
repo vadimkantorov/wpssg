@@ -66,7 +66,7 @@ jobs:
           php ./wp-cli.phar export --filename_format=exportWXR.xml
           php ./wp-cli.phar option list --format=json | jq '.' > exportOPTIONS.json
           #
-          jq -r '.[] | [ (.option_name | @json), (.option_value | @json) ] | @tsv' exportOPTIONS.json | xargs php ./wp-cli.phar option update --format=json
+          jq -r '.[] | [ (.option_name | @json), (.option_value | @json) ] | @tsv' exportOPTIONS.json > exportOPTIONS.txt #| xargs php ./wp-cli.phar option update --format=json
  
       - name: Export to Sqlite
         run: |
@@ -404,6 +404,7 @@ jobs:
             exportPOSTMARK/
             exportWXR.xml
             exportOPTIONS.json
+            exportOPTIONS.txt
             wpssgopts.xml
             wpssgddl.sql
             wpssgdata.sql
