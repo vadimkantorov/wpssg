@@ -63,6 +63,8 @@ jobs:
           
           mkdir ./exportPOSTMARK/
           php ./wp-cli.phar postmark export --dir=./exportPOSTMARK/ $(php ./wp-cli.phar post list --post_type='post' --format=ids)
+      - name: Export content and options
+        run: |
           php ./wp-cli.phar export --filename_format=exportWXR.xml
           php ./wp-cli.phar option list --format=json | jq '.' > exportOPTIONS.json
           #
