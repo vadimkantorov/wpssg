@@ -69,6 +69,7 @@ jobs:
           php ./wp-cli.phar option list --format=json | jq '.' > exportOPTIONS.json
           #
           jq -r '.[] | [ (.option_name | @json), (.option_value | @json) ] | @tsv' exportOPTIONS.json > exportOPTIONS.txt #| xargs php ./wp-cli.phar option update --format=json
+          jq -r '.[] | [ (.option_name | @json), (.option_value | @json) ] | @tsv' exportOPTIONS.json | xargs -l php ./wp-cli.phar option update --format=json
  
       - name: Export to Sqlite
         run: |
