@@ -44,7 +44,7 @@ jobs:
 
           php ./wp-cli.phar core download --locale=en_US      #--skip-content --force
           php ./wp-cli.phar config create --locale=en_US --dbuser=wpssguser --dbpass=wpssgpass --dbname=wpssgdb --dbhost=127.0.0.1
-          #php ./wp-cli.phar db create
+          #php ./wp-cli.phar db create # https://github.com/orgs/wp-cli/discussions/6003
           php ./wp-cli.phar core install --url=localhost:8080 --title=wpcli --admin_user=wpcli --admin_password=wpcli --admin_email=info@wp-cli.org
           php ./wp-cli.phar option set permalink_structure '/%year%-%monthnum%-%day%-%postname%/'
           
@@ -65,10 +65,10 @@ jobs:
           php ./wp-cli.phar postmark export --dir=./exportPOSTMARK/ $(php ./wp-cli.phar post list --post_type='post' --format=ids)
       - name: Export content and options
         run: |
-          php ./wp-cli.phar export --filename_format=exportWXR.xml
+          php ./wp-cli.phar export --with_attachments --filename_format=exportWXR.xml
           php ./wp-cli.phar option list --format=json | jq '.' > exportOPTIONS.json
-          #
-          cat exportOPTIONS.json | python -c 'import json,sys,subprocess;[subprocess.run(["php","./wp-cli.phar","option","update",el["option_name"]],input=el["option_value"].encode("utf-8")) for el in json.load(sys.stdin)]'
+          # https://github.com/wp-cli/entity-command/issues/512 https://github.com/wp-cli/core-command/issues/278
+          #cat exportOPTIONS.json | python -c 'import json,sys,subprocess;[subprocess.run(["php","./wp-cli.phar","option","update",el["option_name"]],input=el["option_value"].encode("utf-8")) for el in json.load(sys.stdin)]'
           #jq -r '.[] | [ .option_name, .option_value ] | @tsv' exportOPTIONS.json | tr '\t' '\0' | tr '\n' '\0' | xargs -0 -n2 php ./wp-cli.phar option update #python -c 'import sys,json;print(sys.argv[1],sys.argv[2], flush=True);json.loads(sys.argv[2])' #php ./wp-cli.phar option update --format=json
           #jq -r '.[] | [ .option_name, (.option_value | @json) ] | @tsv' exportOPTIONS.json | tr '\t' '\0' | tr '\n' '\0' | xargs -0 -n2 php ./wp-cli.phar option update #python -c 'import sys,json;print(sys.argv[1],sys.argv[2], flush=True);json.loads(sys.argv[2])' #php ./wp-cli.phar option update --format=json
  
